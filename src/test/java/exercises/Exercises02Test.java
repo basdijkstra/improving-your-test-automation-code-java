@@ -7,9 +7,9 @@ import com.microsoft.playwright.options.AriaRole;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pages.LoginPage;
-import pages.ProductDetailPage;
-import pages.ProductsOverviewPage;
+import pages.saucedemo.LoginPage;
+import pages.saucedemo.ProductDetailPage;
+import pages.saucedemo.ProductsOverviewPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 

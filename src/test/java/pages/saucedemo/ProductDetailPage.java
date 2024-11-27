@@ -1,4 +1,4 @@
-package pages;
+package pages.saucedemo;
 
 import com.microsoft.playwright.Page;
 

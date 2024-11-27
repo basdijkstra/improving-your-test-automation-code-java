@@ -1,4 +1,4 @@
-package pages;
+package pages.parabank;
 
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
@@ -14,14 +14,14 @@ public class LoginPage {
 
     public LoginPage open() {
 
-        this.page.navigate("https://www.saucedemo.com/");
+        this.page.navigate("https://parabank.parasoft.com/");
         return this;
     }
 
     public void loginAs(String username, String password) {
 
-        this.page.getByPlaceholder("Username").fill(username);
-        this.page.getByPlaceholder("Password").fill(password);
-        this.page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
+        this.page.locator("[name=username]").fill(username);
+        this.page.locator("[name=password]").fill(password);
+        this.page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Log In")).click();
     }
 }
