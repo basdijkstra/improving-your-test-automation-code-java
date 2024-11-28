@@ -8,7 +8,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 @WireMockTest(httpPort = 9876)
-public class Exercise04Test {
+public class Exercises04Test {
 
     @Test
     public void applyFor1000DollarLoan_with100DownPayment_shouldBeApproved() {
