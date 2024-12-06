@@ -5,19 +5,20 @@ public class OrderHandler {
     private final StockManager stockManager;
     private final PaymentProcessor paymentProcessor;
 
-    public OrderHandler() {
+    public OrderHandler(StockManager stockManager, PaymentProcessor paymentProcessor) {
 
-        this.stockManager = new StockManager();
-        this.paymentProcessor = new PaymentProcessor(PaymentProcessorType.IDEAL);
+        this.stockManager = stockManager;
+        this.paymentProcessor = paymentProcessor;
     }
 
-    public boolean handleOrder(OrderItem item, int quantity) {
+    public boolean handleRemoveFromStock(OrderItem item, int quantity) {
 
-        if (this.stockManager.removeFromStock(item, quantity)) {
-            return this.paymentProcessor.payFor(item, quantity);
-        }
+        return this.stockManager.removeFromStock(item, quantity);
+    }
 
-        return false;
+    public boolean handleOrderPayment(OrderItem item, int quantity) {
+
+        return this.paymentProcessor.payFor(item, quantity);
     }
 
     public int getStockForItem(OrderItem item) {
