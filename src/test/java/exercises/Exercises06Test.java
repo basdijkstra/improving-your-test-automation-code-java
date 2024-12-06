@@ -2,21 +2,24 @@ package exercises;
 
 import order.OrderHandler;
 import order.OrderItem;
+import order.StockManager;
+import order.StripeProcessor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 public class Exercises06Test {
+
+    @Mock
+    StockManager stockManager;
 
     @Test
     public void useMockedStockManager() {
-
-        /**
-         * First, write a test that:
-         * - Creates a new OrderHandler
-         * - Places 6 orders for OrderItem.SUPER_MARIO_BROS_3, each with quantity = 1
-         *   (remember, the original stock is only 5)
-         * - Asserts that the 6th order fails
-         */
 
         /**
          * Now that we can inject a StockManager object when creating the OrderHandler,
@@ -30,6 +33,15 @@ public class Exercises06Test {
          * - Asserts that this fails (so without having to place 5 actual orders first)
          * - Verifies that exactly one call was made to the mocked StockManager method
          */
+
+        when(stockManager.removeFromStock(OrderItem.SUPER_MARIO_BROS_3, 1)).thenReturn(false);
+
+        OrderHandler orderHandler = new OrderHandler(stockManager, new StripeProcessor());
+
+        boolean result = orderHandler.handleRemoveFromStock(OrderItem.SUPER_MARIO_BROS_3, 1);
+
+        Assertions.assertFalse(result);
+
     }
 
     @Test
