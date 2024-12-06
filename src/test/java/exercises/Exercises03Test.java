@@ -5,7 +5,8 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import pages.parabank.AccountsOverviewPage;
 import pages.parabank.LoginPage;
 import pages.parabank.RequestLoanPage;
@@ -26,8 +27,14 @@ public class Exercises03Test {
         this.page = this.browser.newPage();
     }
 
-    @Test
-    public void submitALoanApplicationRequest() {
+    @ParameterizedTest
+    @CsvSource({
+            "1000, 100, Approved",
+            "10000, 100, Denied",
+            "5000, 500, Approved"
+    })
+    public void submitALoanApplicationRequest
+            (String amount, String downPayment, String expectedResult) {
 
         new LoginPage(this.page)
                 .open()
@@ -37,44 +44,10 @@ public class Exercises03Test {
                 .selectMenuItem("Request Loan");
 
         new RequestLoanPage(this.page)
-                .submitLoanApplicationFor("1000", "100", "12345");
+                .submitLoanApplicationFor(amount, downPayment, "12345");
 
         assertThat(page.locator("#loanStatus")).isVisible();
-        assertThat(page.locator("#loanStatus")).hasText("Approved");
-    }
-
-    @Test
-    public void submitAnotherLoanApplicationRequest() {
-
-        new LoginPage(this.page)
-                .open()
-                .loginAs("john", "demo");
-
-        new AccountsOverviewPage(this.page)
-                .selectMenuItem("Request Loan");
-
-        new RequestLoanPage(this.page)
-                .submitLoanApplicationFor("10000", "100", "12345");
-
-        assertThat(page.locator("#loanStatus")).isVisible();
-        assertThat(page.locator("#loanStatus")).hasText("Denied");
-    }
-
-    @Test
-    public void submitYetAnotherLoanApplicationRequest() {
-
-        new LoginPage(this.page)
-                .open()
-                .loginAs("john", "demo");
-
-        new AccountsOverviewPage(this.page)
-                .selectMenuItem("Request Loan");
-
-        new RequestLoanPage(this.page)
-                .submitLoanApplicationFor("5000", "500", "12345");
-
-        assertThat(page.locator("#loanStatus")).isVisible();
-        assertThat(page.locator("#loanStatus")).hasText("Approved");
+        assertThat(page.locator("#loanStatus")).hasText(expectedResult);
     }
 
     @AfterEach

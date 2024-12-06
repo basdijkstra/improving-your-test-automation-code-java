@@ -2,13 +2,12 @@ package pages.saucedemo;
 
 import com.microsoft.playwright.Page;
 
-public class ProductDetailPage extends BasePage{
+public class ProductDetailPage {
 
     private final Page page;
 
     public ProductDetailPage(Page page) {
 
-        super(page);
         this.page = page;
     }
 

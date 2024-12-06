@@ -2,11 +2,11 @@ package pages.saucedemo;
 
 import com.microsoft.playwright.Page;
 
-public class BasePage {
+public class HeaderComponent {
 
-    private final Page page;
+    private Page page;
 
-    protected BasePage(Page page) {
+    public HeaderComponent(Page page) {
 
         this.page = page;
     }

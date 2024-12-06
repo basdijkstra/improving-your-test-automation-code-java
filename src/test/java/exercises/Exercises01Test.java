@@ -4,35 +4,53 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.AriaRole;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pages.saucedemo.HeaderComponent;
+import pages.saucedemo.LoginPage;
+import pages.saucedemo.ProductDetailPage;
+import pages.saucedemo.ProductsOverviewPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class Exercises01Test {
 
+    private Playwright playwright;
+    private Browser browser;
+    private Page page;
+
+    @BeforeEach
+    public void startPlaywrightSession() {
+
+        this.playwright = Playwright.create();
+        this.browser = this.playwright.chromium().launch();
+        this.page = this.browser.newPage();
+    }
+
     @Test
     public void orderABackpack() {
 
-        Playwright playwright = Playwright.create();
+        new LoginPage(this.page)
+                .open()
+                .loginAs("standard_user", "secret_sauce");
 
-        Browser browser = playwright.chromium().launch();
+        new ProductsOverviewPage(this.page)
+                .selectProduct("Sauce Labs Backpack");
 
-        Page page = browser.newPage();
+        new ProductDetailPage(this.page)
+                .addProductToCart();
 
-        page.navigate("https://www.saucedemo.com/");
+        new HeaderComponent(this.page)
+                .gotoShoppingCart();
 
-        page.getByPlaceholder("Username").fill("standard_user");
-        page.getByPlaceholder("Password").fill("secret_sauce");
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
+        assertThat(this.page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Checkout"))).isVisible();
+    }
 
-        page.getByText("Sauce Labs Backpack").click();
-        page.getByText("Add to cart").click();
+    @AfterEach
+    public void stopPlaywrightSession() {
 
-        page.locator("[data-test=shopping-cart-link]").click();
-
-        assertThat(page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Checkout"))).isVisible();
-
-        browser.close();
-        playwright.close();
+        this.browser.close();
+        this.playwright.close();
     }
 }

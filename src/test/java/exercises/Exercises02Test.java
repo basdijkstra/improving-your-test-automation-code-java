@@ -7,6 +7,7 @@ import com.microsoft.playwright.options.AriaRole;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pages.saucedemo.HeaderComponent;
 import pages.saucedemo.LoginPage;
 import pages.saucedemo.ProductDetailPage;
 import pages.saucedemo.ProductsOverviewPage;
@@ -38,7 +39,9 @@ public class Exercises02Test {
                 .selectProduct("Sauce Labs Backpack");
 
         new ProductDetailPage(this.page)
-                .addProductToCart()
+                .addProductToCart();
+
+        new HeaderComponent(this.page)
                 .gotoShoppingCart();
 
         assertThat(page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Checkout"))).isVisible();
